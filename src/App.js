@@ -11,6 +11,7 @@ import "./global.css";
 function App() {
   const [pokemons, setPokemons] = useState([]);
   const [q, setQ] = useState([]);
+  const [ptype, setpType] = useState('');
   const [rollback, setRollback] = useState([]);
 
   useEffect(() => {
@@ -21,8 +22,16 @@ function App() {
     loadPokemons();
   }, []);
 
-  const filteredPokemons = () =>
-    q ? pokemons.filter(p => p.name.indexOf(q) > -1) : pokemons;
+  const filteredPokemons = () => {
+    let arrPokemons = Object.assign(pokemons);
+    if (q) {
+      arrPokemons = arrPokemons.filter(p => p.name.indexOf(q) > -1);
+    }
+    if (pType) {
+      arrPokemons = arrPokemons.filter(p => p.type.indexOf(pType) > -1);
+    }
+    return arrPokemons;
+  }
 
   const selectedTypes = () => {
     const arr = pokemons.map(p => p.type[0].toString());
@@ -31,28 +40,29 @@ function App() {
   };
 
   function filteredType(value) {
-    if (value) {
-      /*const arr = pokemons.map(p => {
-        const a = p.type.map(t => t === value && t);
-        if (a[0] !== false && a[1] !== false) return p;
-      });*/
-      const arr = pokemons.map(p => {
-        if (p.type.length === 2) {
-          const bool = p.type[0] === value || p.type[1] === value;
-          return bool && p;
-        } else {
-          const bool = p.type[0] === value;
-          return bool && p;
-        }
-      });
+    setpType(value);
+//     if (value) {
+//       /*const arr = pokemons.map(p => {
+//         const a = p.type.map(t => t === value && t);
+//         if (a[0] !== false && a[1] !== false) return p;
+//       });*/
+//       const arr = pokemons.map(p => {
+//         if (p.type.length === 2) {
+//           const bool = p.type[0] === value || p.type[1] === value;
+//           return bool && p;
+//         } else {
+//           const bool = p.type[0] === value;
+//           return bool && p;
+//         }
+//       });
 
-      const arrayPokemons = [...new Set(arr)].splice(1, arr.length);
+//       const arrayPokemons = [...new Set(arr)].splice(1, arr.length);
 
-      setRollback(pokemons);
-      setPokemons(arrayPokemons);
-    } else {
-      setPokemons(rollback);
-    }
+//       setRollback(pokemons);
+//       setPokemons(arrayPokemons);
+//     } else {
+//       setPokemons(rollback);
+//     }
   }
 
   return (
